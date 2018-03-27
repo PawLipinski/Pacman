@@ -22,7 +22,12 @@ namespace Pacman
     {
         public MainWindow()
         {
+            //this.BoardSpace.Background = new SolidColorBrush(Colors.Black);
             InitializeComponent();
+
+            Board myBoard = new Board(this);
+
+            myBoard.printBoard();
         }
     }
 }

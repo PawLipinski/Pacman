@@ -1,8 +1,9 @@
 ﻿<Window x:Class="Pacman.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" SizeToContent="WidthAndHeight">
     <Grid>
-        
+        <Canvas Name="BoardSpace" Background="Black"  HorizontalAlignment="Left" Height="440" Margin="10,10,10,10" VerticalAlignment="Top" Width="380"/>
+
     </Grid>
 </Window>
