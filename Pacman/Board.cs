@@ -4,14 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace Pacman
 {
     class Board
     {
 
-        public List<Wall> walls;
+        private List<Wall> walls;
         private MainWindow gameWindow;
+        private Pac pacman;
+        private DispatcherTimer boardTimer;
 
         private int[,] wallsDefinition = new int[22, 19]
         {
@@ -45,6 +48,10 @@ namespace Pacman
             this.gameWindow = window;
             this.walls = new List<Wall>();
             InitializeWalls();
+            boardTimer = new DispatcherTimer();
+            boardTimer.Tick += new EventHandler(dispatcherTimer_Tick);
+            boardTimer.Interval = new TimeSpan(0, 0, 0, 0, 35);
+
         }
 
         private void InitializeWalls()
@@ -72,9 +79,21 @@ namespace Pacman
             }
         }
 
+        private void dispatcherTimer_Tick(object sender, EventArgs e)
+        {
+            this.pacman.Move();
+        }
+
+        public void StartTimer()
+        {
+            boardTimer.Start();
+        }
+
 
         public static int XSize { get { return 19; } }
         public static int YSize { get { return 22; } }
         public List<Wall> Walls { get { return walls; } }
+        public Canvas gameCanvas { get{ return gameWindow.BoardSpace;} }
+        public Pac Pacman { set { this.pacman = value; } }
     }
 }
