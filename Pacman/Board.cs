@@ -13,6 +13,33 @@ namespace Pacman
         public List<Wall> walls;
         private MainWindow gameWindow;
 
+        private int[,] wallsDefinition = new int[22, 19]
+        {
+            {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+            {1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1},
+            {1,0,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1,0,1},
+            {1,0,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1,0,1},
+            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+            {1,0,1,1,0,1,0,1,1,1,1,1,0,1,0,1,1,0,1},
+            {1,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,1},
+            {1,1,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1,1,1},
+            {0,0,0,1,0,1,0,0,0,0,0,0,0,1,0,1,0,0,0},
+            {1,1,1,1,0,1,0,1,1,0,1,1,0,1,0,1,1,1,1},
+            {0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0},
+            {1,1,1,1,0,1,0,1,1,1,1,1,0,1,0,1,1,1,1},
+            {0,0,0,1,0,1,0,0,0,0,0,0,0,1,0,1,0,0,0},
+            {1,1,1,1,0,1,0,1,1,1,1,1,0,1,0,1,1,1,1},
+            {1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1},
+            {1,0,1,1,0,1,1,1,0,1,0,1,1,1,0,1,1,0,1},
+            {1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1},
+            {1,1,0,1,0,1,0,1,1,1,1,1,0,1,0,1,0,1,1},
+            {1,0,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,1},
+            {1,0,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,0,1},
+            {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+            {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+        };
+
+
         public Board(MainWindow window)
         {
             this.gameWindow = window;
@@ -22,94 +49,17 @@ namespace Pacman
 
         private void InitializeWalls()
         {
-            InitializeExternalWalls();
-            InitializeInternalWalls();
-            MirrorBoard();
-        }
-
-        private void InitializeInternalWalls()
-        {
-
-            List<int> myList = new List<int> { 1, 4, 8 };
-
-            for (int j = 2; j < 4; j++)
+            for (int i = 0; i < 22; i++)
             {
-                AddHorizontalWallExcept(myList, j);
-            }
-
-            AddHorizontalWallExcept(new List<int> { 1, 4, 6 }, 5);
-            AddHorizontalWallExcept(new List<int> { 1, 2, 3, 4, 6, 7, 8 }, 6);
-            AddHorizontalWallExcept(new List<int> { 1, 2, 3, 4, 8 }, 7);
-            AddHorizontalWallExcept(new List<int> { 1, 2, 3, 4, 6, 7, 8, 9 }, 8);
-            AddHorizontalWallExcept(new List<int> { 1, 2, 3, 4, 6, 9 }, 9);
-            walls.Add(new Wall(7, 10));
-            AddHorizontalWallExcept(new List<int> { 1, 2, 3, 4, 6}, 11);
-            walls.Add(new Wall(5,12));
-            AddHorizontalWallExcept(new List<int> { 1, 2, 3, 4, 6 }, 13);
-            walls.Add(new Wall(9, 14));
-            AddHorizontalWallExcept(new List<int> { 1, 4, 8 }, 15);
-            walls.Add(new Wall(3, 16));
-            AddHorizontalWallExcept(new List<int> { 2,4,6},17);
-            walls.Add(new Wall(5, 18));
-            walls.Add(new Wall(9, 18));
-            AddHorizontalWallExcept(new List<int>{1,8},19);
-        }
-
-        private void AddHorizontalWallExcept(List<int> exceptionsList, int YPosition)
-        {
-            for (int i = 1; i < Board.XSize / 2 + 1; i++)
-            {
-                if (!exceptionsList.Contains(i))
+                for (int j = 0; j < 19; j++)
                 {
-                    walls.Add(new Wall(i, YPosition));
+                    if (wallsDefinition[i,j]==1)
+                    {
+                        walls.Add(new Wall(j, i));
+                    }
                 }
+                
             }
-        }
-
-        private void InitializeExternalWalls()
-        {
-            //Extreme horizontal lines
-            for (int i = 0; i <= XSize / 2; i++)
-            {
-                walls.Add(new Wall(i, 0));
-                walls.Add(new Wall(i, Board.YSize - 1));
-            }
-
-            //Vertical lines
-            List<int> myList = new List<int> { 8, 10, 12 };
-            for (int i = 1; i <= Board.YSize - 1; i++)
-            {
-                if (!myList.Contains(i))
-                {
-                    walls.Add(new Wall(0, i));
-                }
-            }
-            myList = null;
-
-            for (int i = 1; i <= 3; i++)
-            {
-                walls.Add(new Wall(i, (Board.YSize / 2 - 4)));
-                walls.Add(new Wall(i, (Board.YSize / 2 - 2)));
-                walls.Add(new Wall(i, (Board.YSize / 2)));
-                walls.Add(new Wall(i, (Board.YSize / 2 + 2)));
-            }
-
-            walls.Add(new Wall(3, 8));
-            walls.Add(new Wall(3, 12));
-
-            walls.Add(new Wall(9, 1));
-
-        }
-
-        private void MirrorBoard()
-        {
-            List<Wall> newWalls = new List<Wall>();
-            foreach (var item in walls)
-            {
-                newWalls.Add(item.MirrorWall());
-            }
-
-            walls.AddRange(newWalls);
         }
 
         public void printBoard()
