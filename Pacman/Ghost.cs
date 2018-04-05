@@ -11,7 +11,6 @@ namespace Pacman
         public Ghost(Board gameBoard, int x, int y) 
             : base(gameBoard, x , y)
         {
-
         }
 
         public override void ApplyShape()

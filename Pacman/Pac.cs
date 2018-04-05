@@ -9,30 +9,9 @@ namespace Pacman
 {
     class Pac : Creature
     {
-        public struct Direction
-        {
-            public int x;
-            public int y;
-
-            public Direction(int p1, int p2)
-            {
-                x = p1;
-                y = p2;
-            }
-        }
-
-        private Direction pacmanDirection;
-        //private Ellipse shapeOfTheHero;
-        private int PacSizeModule = Field.Module - 3;
-        private Board gameBoard;
-        private Key demandKey;
-        private Key currentKey;
-        private bool standsStill;
-        private int standCounter;
-        private Dictionary<Key, Direction> directions;
 
         public Pac(Board gameBoard)
-            : base()
+            : base(gameBoard)
         {
             Ellipse shapeOfTheHero = new Ellipse();
             SolidColorBrush mySolidColorBrush = new SolidColorBrush();
@@ -55,124 +34,120 @@ namespace Pacman
             this.demandKey = Key.None;
             this.currentKey = Key.None;
 
-            this.directions = new Dictionary<Key, Direction>();
-            directions.Add(Key.Left, new Direction(-5, 0));
-            directions.Add(Key.Right, new Direction(5, 0));
-            directions.Add(Key.Up, new Direction(0, -5));
-            directions.Add(Key.Down, new Direction(0, 5));
-
-            this.pacmanDirection = directions[Key.Right];
+            this.creatureDirection = directions[Key.Right];
         }
 
+        public override void ApplyShape() { }
 
-        public void PrintTheHero()
-        {
-            Canvas.SetTop(this.FieldShape, this.YCoord + 1.5);
-            Canvas.SetLeft(this.FieldShape, this.XCoord + 1.5);
-            gameBoard.gameCanvas.Children.Add(this.FieldShape);
-        }
 
-        public void MoveTheHero(int x, int y)
-        {
-            if (!CheckCollision(x, y))
-            {
-                gameBoard.gameCanvas.Children.Remove(this.FieldShape);
-                this.XCoord = x;
-                this.YCoord = y;
-                this.standsStill = false;
-                PrintTheHero();
-            }
-            else
-            {
-                this.standCounter++;
-            }
+        //public void PrintTheHero()
+        //{
+        //    Canvas.SetTop(this.FieldShape, this.YCoord + 1.5);
+        //    Canvas.SetLeft(this.FieldShape, this.XCoord + 1.5);
+        //    gameBoard.gameCanvas.Children.Add(this.FieldShape);
+        //}
 
-            if (standCounter >= 2)
-            {
-                standsStill = true;
-                standCounter = 0;
-            }
-        }
+        //public void MoveTheHero(int x, int y)
+        //{
+        //    if (!CheckCollision(x, y))
+        //    {
+        //        gameBoard.gameCanvas.Children.Remove(this.FieldShape);
+        //        this.XCoord = x;
+        //        this.YCoord = y;
+        //        this.standsStill = false;
+        //        PrintTheHero();
+        //    }
+        //    else
+        //    {
+        //        this.standCounter++;
+        //    }
 
-        private bool CheckCollision(int x, int y)
-        {
-            bool isCollision = false;
+        //    if (standCounter >= 2)
+        //    {
+        //        standsStill = true;
+        //        standCounter = 0;
+        //    }
+        //}
 
-            foreach (var item in gameBoard.Walls)
-            {
-                if (((x + Field.Module > item.XCoord) && (x < item.XCoord + Field.Module)) && ((y + Field.Module > item.YCoord) && (y < item.YCoord + Field.Module)))
-                {
-                    isCollision = true;
-                }
-            }
+        //private bool CheckCollision(int x, int y)
+        //{
+        //    bool isCollision = false;
 
-            return isCollision;
-        }
+        //    foreach (var item in gameBoard.Walls)
+        //    {
+        //        if (((x + Field.Module > item.XCoord) && (x < item.XCoord + Field.Module)) && ((y + Field.Module > item.YCoord) && (y < item.YCoord + Field.Module)))
+        //        {
+        //            isCollision = true;
+        //        }
+        //    }
 
-        public void MoveTheHeroRelative(int x, int y)
-        {
-            if (currentKey == Key.None)
-            {
-                return;
-            }
+        //    return isCollision;
+        //}
 
-            int efX = this.XCoord + x;
-            int efY = this.YCoord + y;
+        //public void MoveTheHeroRelative(int x, int y)
+        //{
+        //    if (currentKey == Key.None)
+        //    {
+        //        return;
+        //    }
 
-            this.MoveTheHero(efX, efY);
-        }
+        //    int efX = this.XCoord + x;
+        //    int efY = this.YCoord + y;
 
-        public void ChangeDirection(Direction dir)
-        {
-            if (!CheckCollision(this.XCoord + dir.x, this.YCoord + dir.y))
-            {
-                this.currentKey = demandKey;
-                demandKey = Key.None;
-                this.pacmanDirection = dir;
-            }
-        }
+        //    this.MoveTheHero(efX, efY);
+        //}
 
-        public void DemandChangeDirection(Key direction)
-        {
-            if ((currentKey == Key.None) || (standsStill))
-            {
-                CurrentKey = direction;
-                return;
-            }
+        //public void ChangeDirection(Direction dir)
+        //{
+        //    if (!CheckCollision(this.XCoord + dir.x, this.YCoord + dir.y))
+        //    {
+        //        this.currentKey = demandKey;
+        //        demandKey = Key.None;
+        //        this.pacmanDirection = dir;
+        //    }
+        //}
 
-            int tolerance = 8;
+        //public void DemandChangeDirection(Key direction)
+        //{
+        //    if ((currentKey == Key.None) || (standsStill))
+        //    {
+        //        CurrentKey = direction;
+        //        return;
+        //    }
 
-            int projectedX = this.XCoord;
-            int projectedY = this.YCoord;
+        //    int tolerance = 8;
 
-            bool canBeChanged = false;
+        //    int projectedX = this.XCoord;
+        //    int projectedY = this.YCoord;
 
-            for (int i = 0; i < tolerance; i++)
-            {
-                projectedX += pacmanDirection.x;
-                projectedY += pacmanDirection.y;
+        //    bool canBeChanged = false;
 
-                try
-                {
-                    int projectedReroutedX = projectedX + this.directions[direction].x;
-                    int projectedReroutedY = projectedY + this.directions[direction].y;
+        //    for (int i = 0; i < tolerance; i++)
+        //    {
+        //        projectedX += pacmanDirection.x;
+        //        projectedY += pacmanDirection.y;
 
-                    if (!CheckCollision(projectedReroutedX, projectedReroutedY))
-                    {
-                        canBeChanged = true;
-                    }
-                }
-                catch { }
+        //        try
+        //        {
+        //            int projectedReroutedX = projectedX + this.directions[direction].x;
+        //            int projectedReroutedY = projectedY + this.directions[direction].y;
 
-            }
+        //            if (!CheckCollision(projectedReroutedX, projectedReroutedY))
+        //            {
+        //                canBeChanged = true;
+        //            }
+        //        }
+        //        catch { }
 
-            if (canBeChanged)
-            {
-                this.demandKey = direction;
-            }
-        }
+        //    }
 
-        public void Move()
+        //    if (canBeChanged)
+        //    {
+        //        this.demandKey = direction;
+        //    }
+        //}
+
+        public override void Move()
         {
             try
             {
@@ -184,7 +159,7 @@ namespace Pacman
 
             Eat();
             TeleportMe();
-            MoveTheHeroRelative(pacmanDirection.x, pacmanDirection.y);
+            MoveTheHeroRelative(creatureDirection.x, creatureDirection.y);
         }
 
         private void Eat()
@@ -212,18 +187,18 @@ namespace Pacman
             }
         }
 
-        public Key CurrentKey
-        {
-            get { return this.currentKey; }
-            set
-            {
-                this.currentKey = value;
-                try
-                {
-                    this.pacmanDirection = directions[currentKey];
-                }
-                catch { }
-            }
-        }
+        //public Key CurrentKey
+        //{
+        //    get { return this.currentKey; }
+        //    set
+        //    {
+        //        this.currentKey = value;
+        //        try
+        //        {
+        //            this.pacmanDirection = directions[currentKey];
+        //        }
+        //        catch { }
+        //    }
+        //}
     }
 }

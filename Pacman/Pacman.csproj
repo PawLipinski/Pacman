@@ -53,6 +53,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Creature.cs" />
     <Compile Include="Food.cs" />
     <Compile Include="Pac.cs" />
     <Compile Include="Wall.cs" />
