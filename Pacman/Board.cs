@@ -15,6 +15,7 @@ namespace Pacman
         private MainWindow gameWindow;
         private Pac pacman;
         private DispatcherTimer boardTimer;
+        private Food boardFood;
 
         private int[,] wallsDefinition = new int[22, 19]
         {
@@ -47,6 +48,9 @@ namespace Pacman
         {
             this.gameWindow = window;
             this.walls = new List<Wall>();
+            this.boardFood = new Food(this);
+            boardFood.GenerateFood();
+            boardFood.PrintTheDots();
             InitializeWalls();
             boardTimer = new DispatcherTimer();
             boardTimer.Tick += new EventHandler(dispatcherTimer_Tick);
@@ -95,5 +99,6 @@ namespace Pacman
         public List<Wall> Walls { get { return walls; } }
         public Canvas gameCanvas { get{ return gameWindow.BoardSpace;} }
         public Pac Pacman { set { this.pacman = value; } }
+        public Food BoardFood { get { return this.boardFood; } }
     }
 }

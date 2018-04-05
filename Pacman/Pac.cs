@@ -180,7 +180,34 @@ namespace Pacman
             {
             }
 
+            Eat();
+            TeleportMe();
             MoveTheHeroRelative(pacmanDirection.x, pacmanDirection.y);
+        }
+
+        private void Eat()
+        {
+            //Dot dotToRemove = gameBoard.BoardFood.Dots.Find(item => (item.XCoord == this.XCoord * Field.Module) && (item.YCoord == this.YCoord * Field.Module));
+            Dot dotToRemove = gameBoard.BoardFood.Dots.Find(item => (item.XCoord == this.XCoord) && (item.YCoord == this.YCoord));
+
+            if (dotToRemove != null)
+            {
+                gameBoard.BoardFood.RemoveTheDot(dotToRemove);
+            }
+        }
+
+        private void TeleportMe()
+        {
+            if (this.XCoord < -Field.Module)
+            {
+                this.XCoord = 19 * Field.Module;
+                return;
+            }
+            else if (this.XCoord >= 19 * Field.Module)
+            {
+                this.XCoord = -Field.Module;
+                return;
+            }
         }
 
         public Key CurrentKey
