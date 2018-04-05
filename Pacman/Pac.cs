@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -19,8 +16,8 @@ namespace Pacman
 
             public Direction(int p1, int p2)
             {
-                x=p1;
-                y=p1;
+                x = p1;
+                y = p2;
             }
         }
 
@@ -30,7 +27,9 @@ namespace Pacman
         private Board gameBoard;
         private Key demandKey;
         private Key currentKey;
-        private Dictionary<Key,Direction> directions;
+        private bool standsStill;
+        private int standCounter;
+        private Dictionary<Key, Direction> directions;
 
         public Pac(Board gameBoard)
             : base()
@@ -41,6 +40,8 @@ namespace Pacman
             shapeOfTheHero.Fill = mySolidColorBrush;
             shapeOfTheHero.StrokeThickness = 0;
             shapeOfTheHero.Stroke = Brushes.Black;
+            this.standsStill = false;
+            this.standCounter = 0;
 
             shapeOfTheHero.Width = PacSizeModule;
             shapeOfTheHero.Height = PacSizeModule;
@@ -52,11 +53,13 @@ namespace Pacman
             this.demandKey = Key.None;
             this.currentKey = Key.None;
 
-            this.directions = new Dictionary<Key,Direction>();
-            directions.Add(Key.Left,new Direction(-5,0));
-            directions.Add(Key.Right,new Direction( 5,0));
-            directions.Add(Key.Up,new Direction(0,-5));
-            directions.Add(Key.Down,new Direction(0,5));
+            this.directions = new Dictionary<Key, Direction>();
+            directions.Add(Key.Left, new Direction(-5, 0));
+            directions.Add(Key.Right, new Direction(5, 0));
+            directions.Add(Key.Up, new Direction(0, -5));
+            directions.Add(Key.Down, new Direction(0, 5));
+
+            this.pacmanDirection = directions[Key.Right];
         }
 
 
@@ -74,7 +77,18 @@ namespace Pacman
                 gameBoard.gameCanvas.Children.Remove(shapeOfTheHero);
                 this.XCoord = x;
                 this.YCoord = y;
+                this.standsStill = false;
                 PrintTheHero();
+            }
+            else
+            {
+                this.standCounter++;
+            }
+
+            if (standCounter >= 2)
+            {
+                standsStill = true;
+                standCounter = 0;
             }
         }
 
@@ -95,6 +109,11 @@ namespace Pacman
 
         public void MoveTheHeroRelative(int x, int y)
         {
+            if (currentKey == Key.None)
+            {
+                return;
+            }
+
             int efX = this.XCoord + x;
             int efY = this.YCoord + y;
 
@@ -113,11 +132,13 @@ namespace Pacman
 
         public void DemandChangeDirection(Key direction)
         {
-            if (currentKey == Key.None)
+            if ((currentKey == Key.None) || (standsStill))
             {
-                currentKey = direction;
+                CurrentKey = direction;
+                return;
             }
-            int tolerance = 1;
+
+            int tolerance = 8;
 
             int projectedX = this.XCoord;
             int projectedY = this.YCoord;
@@ -129,10 +150,18 @@ namespace Pacman
                 projectedX += pacmanDirection.x;
                 projectedY += pacmanDirection.y;
 
-                if (!CheckCollision(projectedX, projectedY))
+                try
                 {
-                    canBeChanged = true;
+                    int projectedReroutedX = projectedX + this.directions[direction].x;
+                    int projectedReroutedY = projectedY + this.directions[direction].y;
+
+                    if (!CheckCollision(projectedReroutedX, projectedReroutedY))
+                    {
+                        canBeChanged = true;
+                    }
                 }
+                catch { }
+
             }
 
             if (canBeChanged)
@@ -143,8 +172,6 @@ namespace Pacman
 
         public void Move()
         {
-            //if ((currentKey != demandKey) && (demandKey != Key.None))
-            //{
             try
             {
                 ChangeDirection(directions[demandKey]);
@@ -152,8 +179,22 @@ namespace Pacman
             catch (Exception)
             {
             }
-            //}
+
             MoveTheHeroRelative(pacmanDirection.x, pacmanDirection.y);
+        }
+
+        public Key CurrentKey
+        {
+            get { return this.currentKey; }
+            set
+            {
+                this.currentKey = value;
+                try
+                {
+                    this.pacmanDirection = directions[currentKey];
+                }
+                catch { }
+            }
         }
     }
 }
