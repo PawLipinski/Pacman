@@ -54,7 +54,7 @@ namespace Pacman
             InitializeWalls();
             boardTimer = new DispatcherTimer();
             boardTimer.Tick += new EventHandler(dispatcherTimer_Tick);
-            boardTimer.Interval = new TimeSpan(0, 0, 0, 0, 35);
+            boardTimer.Interval = new TimeSpan(0, 0, 0, 0, 32);
 
         }
 
@@ -92,7 +92,6 @@ namespace Pacman
         {
             boardTimer.Start();
         }
-
 
         public static int XSize { get { return 19; } }
         public static int YSize { get { return 22; } }

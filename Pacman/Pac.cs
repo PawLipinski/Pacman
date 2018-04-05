@@ -7,7 +7,7 @@ using System.Windows.Shapes;
 
 namespace Pacman
 {
-    class Pac : Field
+    class Pac : Creature
     {
         public struct Direction
         {
@@ -22,7 +22,7 @@ namespace Pacman
         }
 
         private Direction pacmanDirection;
-        private Ellipse shapeOfTheHero;
+        //private Ellipse shapeOfTheHero;
         private int PacSizeModule = Field.Module - 3;
         private Board gameBoard;
         private Key demandKey;
@@ -34,7 +34,7 @@ namespace Pacman
         public Pac(Board gameBoard)
             : base()
         {
-            shapeOfTheHero = new Ellipse();
+            Ellipse shapeOfTheHero = new Ellipse();
             SolidColorBrush mySolidColorBrush = new SolidColorBrush();
             mySolidColorBrush.Color = Color.FromArgb(255, 255, 255, 0);
             shapeOfTheHero.Fill = mySolidColorBrush;
@@ -45,6 +45,8 @@ namespace Pacman
 
             shapeOfTheHero.Width = PacSizeModule;
             shapeOfTheHero.Height = PacSizeModule;
+
+            this.FieldShape.Children.Add(shapeOfTheHero);
 
             this.gameBoard = gameBoard;
 
@@ -65,16 +67,16 @@ namespace Pacman
 
         public void PrintTheHero()
         {
-            Canvas.SetTop(shapeOfTheHero, this.YCoord + 1.5);
-            Canvas.SetLeft(shapeOfTheHero, this.XCoord + 1.5);
-            gameBoard.gameCanvas.Children.Add(shapeOfTheHero);
+            Canvas.SetTop(this.FieldShape, this.YCoord + 1.5);
+            Canvas.SetLeft(this.FieldShape, this.XCoord + 1.5);
+            gameBoard.gameCanvas.Children.Add(this.FieldShape);
         }
 
         public void MoveTheHero(int x, int y)
         {
             if (!CheckCollision(x, y))
             {
-                gameBoard.gameCanvas.Children.Remove(shapeOfTheHero);
+                gameBoard.gameCanvas.Children.Remove(this.FieldShape);
                 this.XCoord = x;
                 this.YCoord = y;
                 this.standsStill = false;

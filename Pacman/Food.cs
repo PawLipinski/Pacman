@@ -74,8 +74,8 @@ namespace Pacman
             this.dotShape.StrokeThickness = 0;
             this.dotShape.Stroke = Brushes.Black;
 
-            this.dotShape.Width = 1;
-            this.dotShape.Height = 1;
+            this.dotShape.Width = 2;
+            this.dotShape.Height = 2;
         }
 
         public void PrintDot()
