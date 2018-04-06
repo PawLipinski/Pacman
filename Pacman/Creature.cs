@@ -32,7 +32,7 @@ namespace Pacman
         protected int standCounter;
         protected Dictionary<Key, Direction> directions;
 
-        public Creature(Board board) 
+        public Creature(Board board)
             : base()
         {
             this.gameBoard = board;
@@ -87,8 +87,9 @@ namespace Pacman
                     isCollision = true;
                 }
             }
-
             return isCollision;
+
+            //return this.gameBoard.CheckField(x,y);
         }
 
         public void MoveTheHeroRelative(int x, int y)
@@ -106,11 +107,14 @@ namespace Pacman
 
         public void ChangeDirection(Direction dir)
         {
-            if (!CheckCollision(this.XCoord + dir.x, this.YCoord + dir.y))
+            if (gameBoard.CheckPositioinClean(this.XCoord, this.YCoord))
             {
-                this.currentKey = demandKey;
-                demandKey = Key.None;
-                this.creatureDirection = dir;
+                if (!CheckCollision(this.XCoord + dir.x, this.YCoord + dir.y))
+                {
+                    this.currentKey = demandKey;
+                    demandKey = Key.None;
+                    this.creatureDirection = dir;
+                }
             }
         }
 

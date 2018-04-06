@@ -16,6 +16,7 @@ namespace Pacman
         private Pac pacman;
         private DispatcherTimer boardTimer;
         private Food boardFood;
+        private GhostManager gameGhostManager;
 
         private int[,] wallsDefinition = new int[22, 19]
         {
@@ -56,6 +57,8 @@ namespace Pacman
             boardTimer.Tick += new EventHandler(dispatcherTimer_Tick);
             boardTimer.Interval = new TimeSpan(0, 0, 0, 0, 32);
 
+            this.gameGhostManager = new GhostManager(this);
+
         }
 
         private void InitializeWalls()
@@ -64,12 +67,12 @@ namespace Pacman
             {
                 for (int j = 0; j < 19; j++)
                 {
-                    if (wallsDefinition[i,j]==1)
+                    if (wallsDefinition[i, j] == 1)
                     {
                         walls.Add(new Wall(j, i));
                     }
                 }
-                
+
             }
         }
 
@@ -86,6 +89,7 @@ namespace Pacman
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
             this.pacman.Move();
+            this.gameGhostManager.MoveThemAll();
         }
 
         public void StartTimer()
@@ -93,10 +97,24 @@ namespace Pacman
             boardTimer.Start();
         }
 
+        //public bool CheckField(int x, int y)
+        //{
+            
+        //}
+
+        public bool CheckPositioinClean(int x, int y)
+        {
+            if ((x % Field.Module == 0) && (y % Field.Module == 0))
+            {
+                return true;
+            }
+            else return false;
+        }
+
         public static int XSize { get { return 19; } }
         public static int YSize { get { return 22; } }
         public List<Wall> Walls { get { return walls; } }
-        public Canvas gameCanvas { get{ return gameWindow.BoardSpace;} }
+        public Canvas gameCanvas { get { return gameWindow.BoardSpace; } }
         public Pac Pacman { set { this.pacman = value; } }
         public Food BoardFood { get { return this.boardFood; } }
     }

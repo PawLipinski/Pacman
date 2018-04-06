@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace Pacman
 {
@@ -24,6 +25,8 @@ namespace Pacman
             myPacman.PrintTheHero();
             myBoard.Pacman = myPacman;
 
+            //Ghost myGhost = new Ghost(myBoard, 9,10, Color.FromRgb(255,0,0));
+            //myGhost.PrintTheHero();
 
             myBoard.StartTimer();
         }

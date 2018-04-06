@@ -13,19 +13,9 @@ namespace Pacman
         public Pac(Board gameBoard)
             : base(gameBoard)
         {
-            Ellipse shapeOfTheHero = new Ellipse();
-            SolidColorBrush mySolidColorBrush = new SolidColorBrush();
-            mySolidColorBrush.Color = Color.FromArgb(255, 255, 255, 0);
-            shapeOfTheHero.Fill = mySolidColorBrush;
-            shapeOfTheHero.StrokeThickness = 0;
-            shapeOfTheHero.Stroke = Brushes.Black;
+
             this.standsStill = false;
             this.standCounter = 0;
-
-            shapeOfTheHero.Width = PacSizeModule;
-            shapeOfTheHero.Height = PacSizeModule;
-
-            this.FieldShape.Children.Add(shapeOfTheHero);
 
             this.gameBoard = gameBoard;
 
@@ -37,7 +27,19 @@ namespace Pacman
             this.creatureDirection = directions[Key.Right];
         }
 
-        public override void ApplyShape() { }
+        public override void ApplyShape() 
+        {
+            Ellipse shapeOfTheHero = new Ellipse();
+            SolidColorBrush mySolidColorBrush = new SolidColorBrush();
+            mySolidColorBrush.Color = Color.FromArgb(255, 255, 255, 0);
+            shapeOfTheHero.Fill = mySolidColorBrush;
+            shapeOfTheHero.StrokeThickness = 0;
+            shapeOfTheHero.Stroke = Brushes.Black;
+            shapeOfTheHero.Width = PacSizeModule;
+            shapeOfTheHero.Height = PacSizeModule;
+
+            this.FieldShape.Children.Add(shapeOfTheHero);
+        }
 
 
         //public void PrintTheHero()
