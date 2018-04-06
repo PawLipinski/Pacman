@@ -90,6 +90,21 @@ namespace Pacman
             return isCollision;
 
             //return this.gameBoard.CheckField(x,y);
+
+            //if (this.gameBoard.FieldAvailableDirections(x, y).Contains(this.currentKey))
+            //{
+            //    return false;
+            //}
+            //else return true;
+        }
+
+        public bool CheckPath(Key demandKey,int x, int y)
+        {
+            if (gameBoard.FieldAvailableDirections(x, y).Contains(demandKey))
+            {
+                return true;
+            }
+            else return false;
         }
 
         public void MoveTheHeroRelative(int x, int y)
@@ -109,11 +124,15 @@ namespace Pacman
         {
             if (gameBoard.CheckPositioinClean(this.XCoord, this.YCoord))
             {
-                if (!CheckCollision(this.XCoord + dir.x, this.YCoord + dir.y))
+                //if (!CheckCollision(this.XCoord + dir.x, this.YCoord + dir.y))
+                if (gameBoard.FieldAvailableDirections(this.XCoord, this.YCoord)!=null)
                 {
-                    this.currentKey = demandKey;
-                    demandKey = Key.None;
-                    this.creatureDirection = dir;
+                    if (gameBoard.FieldAvailableDirections(this.XCoord, this.YCoord).Contains(this.currentKey))
+                    {
+                        this.currentKey = demandKey;
+                        demandKey = Key.None;
+                        this.creatureDirection = dir;
+                    }
                 }
             }
         }
@@ -143,7 +162,7 @@ namespace Pacman
                     int projectedReroutedX = projectedX + this.directions[direction].x;
                     int projectedReroutedY = projectedY + this.directions[direction].y;
 
-                    if (!CheckCollision(projectedReroutedX, projectedReroutedY))
+                    if (CheckPath(demandKey, projectedReroutedX, projectedReroutedY))
                     {
                         canBeChanged = true;
                     }
