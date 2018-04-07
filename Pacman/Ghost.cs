@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -12,7 +13,6 @@ namespace Pacman
     class Ghost : Creature
     {
         Color ghostColor;
-        Random randomizer;
 
         public Ghost(Board gameBoard, int x, int y, Color c)
             : base(gameBoard)
@@ -59,19 +59,42 @@ namespace Pacman
             throw new NotImplementedException();
         }
 
-        public void Move(int randomNumber, bool shouldMove)
+        public void ChangeDirection(Random randomizer)
         {
-
-            if (shouldMove)
+            if (gameBoard.CheckPositionClean(this.XCoord, this.YCoord))
             {
-                this.DemandChangeDirection(directions.Keys.ElementAt(randomNumber));
+                List<Key> availableDirs = gameBoard.FieldAvailableDirections(this.XCoord, this.YCoord);
+
+                int range = availableDirs.Count();
+
+                var changeKey = availableDirs.ElementAt(randomizer.Next(range));
+
+                if (currentKey == Key.None)
+                {
+                    this.currentKey = changeKey;
+                    this.creatureDirection = directions[currentKey];
+                }
+                if ((changeKey != oposites[currentKey]) || (standsStill == true))
+                {
+                    this.currentKey = changeKey;
+                    this.creatureDirection = directions[currentKey];
+                }
             }
+        }
+
+        public void Move(Random randomizer)
+        {
+            //if (shouldMove)
+            //{
+            //    this.DemandChangeDirection(directions.Keys.ElementAt(randomNumber));
+            //}
             try
             {
-                ChangeDirection(directions[demandKey]);
+                ChangeDirection(randomizer);
             }
-            catch (Exception){}
+            catch (Exception) { }
 
+            TeleportMe();
             MoveTheHeroRelative(creatureDirection.x, creatureDirection.y);
         }
     }

@@ -39,11 +39,10 @@ namespace Pacman
 
         public void MoveThemAll()
         {
-            bool shouldMove;
             foreach (Ghost item in listOfGhosts)
             {
-                shouldMove = randomizer.Next(0, 100) > 90;
-                item.Move(randomizer.Next(0,3), shouldMove);
+                //shouldMove = randomizer.Next(0, 100) > 90;
+                item.Move(randomizer);
             }
         }
 

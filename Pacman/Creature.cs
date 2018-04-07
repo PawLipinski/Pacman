@@ -31,6 +31,7 @@ namespace Pacman
         protected bool standsStill;
         protected int standCounter;
         protected Dictionary<Key, Direction> directions;
+        protected Dictionary<Key, Key> oposites;
 
         public Creature(Board board)
             : base()
@@ -43,6 +44,12 @@ namespace Pacman
             directions.Add(Key.Right, new Direction(5, 0));
             directions.Add(Key.Up, new Direction(0, -5));
             directions.Add(Key.Down, new Direction(0, 5));
+
+            this.oposites = new Dictionary<Key, Key>();
+            oposites.Add(Key.Left, Key.Right);
+            oposites.Add(Key.Right, Key.Left);
+            oposites.Add(Key.Up, Key.Down);
+            oposites.Add(Key.Down, Key.Up);
         }
 
         public abstract void ApplyShape();
@@ -89,16 +96,23 @@ namespace Pacman
             }
             return isCollision;
 
-            //return this.gameBoard.CheckField(x,y);
-
-            //if (this.gameBoard.FieldAvailableDirections(x, y).Contains(this.currentKey))
-            //{
-            //    return false;
-            //}
-            //else return true;
         }
 
-        public bool CheckPath(Key demandKey,int x, int y)
+        protected void TeleportMe()
+        {
+            if (this.XCoord < -Field.Module)
+            {
+                this.XCoord = 19 * Field.Module;
+                return;
+            }
+            else if (this.XCoord >= 19 * Field.Module)
+            {
+                this.XCoord = -Field.Module;
+                return;
+            }
+        }
+
+        public bool CheckPath(Key demandKey, int x, int y)
         {
             if (gameBoard.FieldAvailableDirections(x, y).Contains(demandKey))
             {
@@ -120,18 +134,24 @@ namespace Pacman
             this.MoveTheHero(efX, efY);
         }
 
-        public void ChangeDirection(Direction dir)
+        public void ChangeDirection(Key directionKey)
         {
-            if (gameBoard.CheckPositionClean(this.XCoord, this.YCoord))
+            if (this.demandKey != Key.None)
             {
-                //if (!CheckCollision(this.XCoord + dir.x, this.YCoord + dir.y))
-                if (gameBoard.FieldAvailableDirections(this.XCoord, this.YCoord)!=null)
+                if (gameBoard.CheckPositionClean(this.XCoord, this.YCoord))
                 {
-                    if (gameBoard.FieldAvailableDirections(this.XCoord, this.YCoord).Contains(this.currentKey))
+                    List<Key> availableDirs = gameBoard.FieldAvailableDirections(this.XCoord, this.YCoord);
+                    if (availableDirs != null)
                     {
-                        this.currentKey = demandKey;
-                        demandKey = Key.None;
-                        this.creatureDirection = dir;
+                        if (availableDirs.Contains(this.demandKey))
+                        {
+                            if (directions.Keys.Contains(demandKey))
+                            {
+                                this.currentKey = demandKey;
+                                demandKey = Key.None;
+                                this.creatureDirection = directions[directionKey];
+                            }
+                        }
                     }
                 }
             }
@@ -162,7 +182,7 @@ namespace Pacman
                     int projectedReroutedX = projectedX + this.directions[direction].x;
                     int projectedReroutedY = projectedY + this.directions[direction].y;
 
-                    if (CheckPath(demandKey, projectedReroutedX, projectedReroutedY))
+                    if (CheckPath(direction, projectedReroutedX, projectedReroutedY))
                     {
                         canBeChanged = true;
                     }

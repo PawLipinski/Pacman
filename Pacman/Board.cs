@@ -153,7 +153,9 @@ namespace Pacman
             int tempX = x / Field.Module;
             int tempY = y / Field.Module;
 
-            return this.availableDirections[tempY, tempX];
+            var result = this.availableDirections[tempY, tempX];
+
+            return result;
         }
 
         public bool CheckPositionClean(int x, int y)
