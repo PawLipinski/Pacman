@@ -122,7 +122,7 @@ namespace Pacman
 
         public void ChangeDirection(Direction dir)
         {
-            if (gameBoard.CheckPositioinClean(this.XCoord, this.YCoord))
+            if (gameBoard.CheckPositionClean(this.XCoord, this.YCoord))
             {
                 //if (!CheckCollision(this.XCoord + dir.x, this.YCoord + dir.y))
                 if (gameBoard.FieldAvailableDirections(this.XCoord, this.YCoord)!=null)

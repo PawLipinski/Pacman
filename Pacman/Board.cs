@@ -156,7 +156,7 @@ namespace Pacman
             return this.availableDirections[tempY, tempX];
         }
 
-        public bool CheckPositioinClean(int x, int y)
+        public bool CheckPositionClean(int x, int y)
         {
             if ((x % Field.Module == 0) && (y % Field.Module == 0))
             {
