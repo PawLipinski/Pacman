@@ -56,7 +56,6 @@ namespace Pacman
 
         private void Eat()
         {
-            //Dot dotToRemove = gameBoard.BoardFood.Dots.Find(item => (item.XCoord == this.XCoord * Field.Module) && (item.YCoord == this.YCoord * Field.Module));
             Dot dotToRemove = gameBoard.BoardFood.Dots.Find(item => (item.XCoord == this.XCoord) && (item.YCoord == this.YCoord));
 
             if (dotToRemove != null)
@@ -78,19 +77,5 @@ namespace Pacman
                 return;
             }
         }
-
-        //public Key CurrentKey
-        //{
-        //    get { return this.currentKey; }
-        //    set
-        //    {
-        //        this.currentKey = value;
-        //        try
-        //        {
-        //            this.pacmanDirection = directions[currentKey];
-        //        }
-        //        catch { }
-        //    }
-        //}
     }
 }

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -22,8 +19,7 @@ namespace Pacman
             }
         }
 
-        protected Direction creatureDirection
-            ;
+        protected Direction creatureDirection;
         protected int PacSizeModule = Field.Module - 3;
         protected Board gameBoard;
         protected Key demandKey;
