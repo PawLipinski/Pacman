@@ -27,6 +27,12 @@ namespace Pacman
             listOfGhosts.Add(new Ghost(this.gameBoard, 8, 10, Color.FromRgb(255, 0, 0)));
             listOfGhosts.Add(new Ghost(this.gameBoard, 9, 10, Color.FromRgb(0, 255, 255)));
             listOfGhosts.Add(new Ghost(this.gameBoard, 10, 10, Color.FromRgb(255, 0, 255)));
+
+            Field destinationField = new Field();
+            destinationField.XCoord = 20;
+            destinationField.YCoord = 20;
+
+            listOfGhosts.ElementAt(0).destination = destinationField;
         }
 
         public void PrintThemAll()

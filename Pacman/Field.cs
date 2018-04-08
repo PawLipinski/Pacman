@@ -7,7 +7,7 @@ using System.Windows.Controls;
 
 namespace Pacman
 {
-    abstract class Field
+    public class Field
     {
         public int XCoord { get; set; }
         public int YCoord { get; set; }

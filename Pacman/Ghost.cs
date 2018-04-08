@@ -14,6 +14,8 @@ namespace Pacman
     {
         Color ghostColor;
 
+        public Field destination;
+
         public Ghost(Board gameBoard, int x, int y, Color c)
             : base(gameBoard)
         {
@@ -21,6 +23,8 @@ namespace Pacman
             this.YCoord = y * Field.Module;
 
             this.ghostColor = c;
+
+            this.destination = null;
 
             SolidColorBrush myBrush = new SolidColorBrush();
             myBrush.Color = this.ghostColor;
@@ -65,29 +69,33 @@ namespace Pacman
             {
                 List<Key> availableDirs = gameBoard.FieldAvailableDirections(this.XCoord, this.YCoord);
 
-                int range = availableDirs.Count();
-
-                var changeKey = availableDirs.ElementAt(randomizer.Next(range));
-
-                if (currentKey == Key.None)
+                bool shouldTakeRandomPath = true;
+                if (this.destination != null)
                 {
-                    this.currentKey = changeKey;
-                    this.creatureDirection = directions[currentKey];
+                    shouldTakeRandomPath = GoToDestination(availableDirs);
                 }
-                if ((changeKey != oposites[currentKey]) || (standsStill == true))
+                if (shouldTakeRandomPath)
                 {
-                    this.currentKey = changeKey;
-                    this.creatureDirection = directions[currentKey];
+                    int range = availableDirs.Count();
+
+                    var changeKey = availableDirs.ElementAt(randomizer.Next(range));
+
+                    if (currentKey == Key.None)
+                    {
+                        this.currentKey = changeKey;
+                        this.creatureDirection = directions[currentKey];
+                    }
+                    if ((changeKey != oposites[currentKey]) || (standsStill == true))
+                    {
+                        this.currentKey = changeKey;
+                        this.creatureDirection = directions[currentKey];
+                    }
                 }
             }
         }
 
         public void Move(Random randomizer)
         {
-            //if (shouldMove)
-            //{
-            //    this.DemandChangeDirection(directions.Keys.ElementAt(randomNumber));
-            //}
             try
             {
                 ChangeDirection(randomizer);
@@ -97,5 +105,57 @@ namespace Pacman
             TeleportMe();
             MoveTheHeroRelative(creatureDirection.x, creatureDirection.y);
         }
+
+        //public bool GoToDestination(List<Key> availableDirs)
+        //{
+        //    if ((this.XCoord == this.destination.XCoord) && (this.YCoord == this.destination.YCoord))
+        //    {
+        //        this.destination = null;
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        List<Key> interestingDirections = new List<Key>();
+
+        //        bool result = true;
+        //        if (this.XCoord > this.destination.XCoord)
+        //        {
+        //            if (availableDirs.Contains(Key.Left))
+        //            {
+        //                this.currentKey = Key.Left;
+        //                this.creatureDirection = directions[currentKey];
+        //                result = false;
+        //            }
+        //        }
+        //        else if (this.XCoord < this.destination.XCoord)
+        //        {
+        //            if (availableDirs.Contains(Key.Right))
+        //            {
+        //                this.currentKey = Key.Right;
+        //                this.creatureDirection = directions[currentKey];
+        //                result = false;
+        //            }
+        //        }
+        //        else if (this.YCoord < this.destination.YCoord)
+        //        {
+        //            if (availableDirs.Contains(Key.Down))
+        //            {
+        //                this.currentKey = Key.Down;
+        //                this.creatureDirection = directions[currentKey];
+        //                result = false;
+        //            }
+        //        }
+        //        else if (this.YCoord > this.destination.YCoord)
+        //        {
+        //            if (availableDirs.Contains(Key.Up))
+        //            {
+        //                this.currentKey = Key.Up;
+        //                this.creatureDirection = directions[currentKey];
+        //                result = false;
+        //            }
+        //        }
+        //        return result;
+        //    }
+        //}
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -163,6 +164,13 @@ namespace Pacman
             }
             else return false;
         }
+
+        public void EndGame()
+        {
+            MessageBox.Show("Koniec gry!");
+            this.gameWindow.Close();
+        }
+
 
         public static int XSize { get { return 19; } }
         public static int YSize { get { return 22; } }
