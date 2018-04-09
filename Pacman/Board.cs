@@ -171,6 +171,62 @@ namespace Pacman
             this.gameWindow.Close();
         }
 
+        public Key IsAnotherFieldVisible(Field seeked, Field seeking, ref Field destination)
+        {
+            List<Key> availableDirs = this.FieldAvailableDirections(seeking.XCoord, seeking.YCoord);
+
+            int seekedX = seeked.XCoord / Field.Module;
+            int seekedY = seeked.YCoord / Field.Module;
+
+            int seekingX = seeking.XCoord / Field.Module;
+            int seekingY = seeking.YCoord / Field.Module;
+
+            foreach (var item in availableDirs)
+            {
+                var answer = ScanCorridor(item, seeking, seeked);
+                if (answer)
+                {
+                    destination = new Field { XCoord = seeked.XCoord, YCoord = seeked.YCoord };
+                    return item;
+                }
+            }
+            return Key.None;
+        }
+
+        private bool ScanCorridor(Key direction, Field basePoint, Field seekPoint)
+        {
+            if ((basePoint.XCoord == seekPoint.XCoord) || (basePoint.YCoord == seekPoint.YCoord))
+            {
+                int currentX = basePoint.XCoord / Field.Module;
+                int currentY = basePoint.YCoord / Field.Module;
+
+                int iteratorX = 0;
+                int iteratorY = 0;
+
+                if (direction == Key.Up) iteratorY = -1;
+                if (direction == Key.Down) iteratorY = 1;
+                if (direction == Key.Left) iteratorX = -1;
+                if (direction == Key.Right) iteratorX = 1;
+
+                bool goForward = true;
+
+                do
+                {
+                    if ((currentX == seekPoint.XCoord/Field.Module) && (currentY == seekPoint.YCoord/Field.Module))
+                    {
+                        return true;
+                    }
+                    currentX += iteratorX;
+                    currentY += iteratorY;
+                    System.Console.WriteLine("Corridor position: " + currentX + " , " + currentY);
+
+                    if (this.wallsDefinition[currentX, currentY] == 1) goForward = false;
+
+                } while (goForward);
+                System.Console.WriteLine("Corridor ended!");
+            }
+            return false;
+        }
 
         public static int XSize { get { return 19; } }
         public static int YSize { get { return 22; } }

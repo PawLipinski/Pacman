@@ -32,7 +32,7 @@ namespace Pacman
             destinationField.XCoord = 20;
             destinationField.YCoord = 20;
 
-            listOfGhosts.ElementAt(0).destination = destinationField;
+            //listOfGhosts.ElementAt(0).destination = destinationField;
         }
 
         public void PrintThemAll()

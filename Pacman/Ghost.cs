@@ -70,11 +70,11 @@ namespace Pacman
                 List<Key> availableDirs = gameBoard.FieldAvailableDirections(this.XCoord, this.YCoord);
 
                 bool shouldTakeRandomPath = true;
-                if (this.destination != null)
-                {
-                    shouldTakeRandomPath = GoToDestination(availableDirs);
-                }
-                if (shouldTakeRandomPath)
+                //if (this.destination == null)
+                //{
+                shouldTakeRandomPath = GoForPacman();
+                //}
+                if (destination == null)
                 {
                     int range = availableDirs.Count();
 
@@ -104,6 +104,40 @@ namespace Pacman
 
             TeleportMe();
             MoveTheHeroRelative(creatureDirection.x, creatureDirection.y);
+        }
+
+        public bool GoForPacman()
+        {
+            Pac prey = this.gameBoard.Pacman;
+
+            Field destin = null;
+            var result = this.gameBoard.IsAnotherFieldVisible(prey, this, ref destin);
+            this.destination = destin;
+            if (destination != null)
+            {
+                if (result != Key.None)
+                {
+                    this.currentKey = result;
+                    this.creatureDirection = directions[currentKey];
+                    return false;
+                }
+            }
+            else
+            {
+                if ((this.XCoord == destination.XCoord) && (this.YCoord == destination.YCoord))
+                {
+                    this.destination = null;
+                    return true;
+                }
+                else if (this.standsStill)
+                {
+                    this.destination = null;
+                }
+                return true;
+            }
+
+            this.destination = null;
+            return true;
         }
 
         //public bool GoToDestination(List<Key> availableDirs)
