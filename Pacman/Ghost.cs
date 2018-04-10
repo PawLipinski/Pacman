@@ -14,7 +14,7 @@ namespace Pacman
     {
         Color ghostColor;
 
-        public Field destination;
+        //public Field destination;
 
         public Ghost(Board gameBoard, int x, int y, Color c)
             : base(gameBoard)
@@ -24,7 +24,7 @@ namespace Pacman
 
             this.ghostColor = c;
 
-            this.destination = null;
+            //this.destination = null;
 
             SolidColorBrush myBrush = new SolidColorBrush();
             myBrush.Color = this.ghostColor;
@@ -70,11 +70,10 @@ namespace Pacman
                 List<Key> availableDirs = gameBoard.FieldAvailableDirections(this.XCoord, this.YCoord);
 
                 bool shouldTakeRandomPath = true;
-                //if (this.destination == null)
-                //{
-                shouldTakeRandomPath = GoForPacman();
-                //}
-                if (destination == null)
+
+                shouldTakeRandomPath = GoForPacman(availableDirs);
+
+                if (shouldTakeRandomPath)
                 {
                     int range = availableDirs.Count();
 
@@ -106,38 +105,27 @@ namespace Pacman
             MoveTheHeroRelative(creatureDirection.x, creatureDirection.y);
         }
 
-        public bool GoForPacman()
+        public bool GoForPacman(List<Key> availableDirs)
         {
             Pac prey = this.gameBoard.Pacman;
 
-            Field destin = null;
-            var result = this.gameBoard.IsAnotherFieldVisible(prey, this, ref destin);
-            this.destination = destin;
-            if (destination != null)
+            var result = this.gameBoard.IsAnotherFieldVisible(prey, this);
+
+            if (result != Key.None)
             {
-                if (result != Key.None)
+                if (availableDirs.Contains(result))
                 {
                     this.currentKey = result;
                     this.creatureDirection = directions[currentKey];
                     return false;
                 }
-            }
-            else
-            {
-                if ((this.XCoord == destination.XCoord) && (this.YCoord == destination.YCoord))
-                {
-                    this.destination = null;
-                    return true;
-                }
-                else if (this.standsStill)
-                {
-                    this.destination = null;
-                }
-                return true;
+                else return true;
             }
 
-            this.destination = null;
-            return true;
+            else
+            {
+                return true;
+            }
         }
 
         //public bool GoToDestination(List<Key> availableDirs)

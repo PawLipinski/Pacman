@@ -171,7 +171,7 @@ namespace Pacman
             this.gameWindow.Close();
         }
 
-        public Key IsAnotherFieldVisible(Field seeked, Field seeking, ref Field destination)
+        public Key IsAnotherFieldVisible(Field seeked, Field seeking)
         {
             List<Key> availableDirs = this.FieldAvailableDirections(seeking.XCoord, seeking.YCoord);
 
@@ -186,7 +186,7 @@ namespace Pacman
                 var answer = ScanCorridor(item, seeking, seeked);
                 if (answer)
                 {
-                    destination = new Field { XCoord = seeked.XCoord, YCoord = seeked.YCoord };
+                    //destination = new Field { XCoord = seeked.XCoord, YCoord = seeked.YCoord };
                     return item;
                 }
             }
@@ -216,14 +216,15 @@ namespace Pacman
                     {
                         return true;
                     }
+
                     currentX += iteratorX;
                     currentY += iteratorY;
-                    System.Console.WriteLine("Corridor position: " + currentX + " , " + currentY);
+                    //System.Console.WriteLine("Corridor position: " + currentX + " , " + currentY);
 
                     if (this.wallsDefinition[currentX, currentY] == 1) goForward = false;
 
                 } while (goForward);
-                System.Console.WriteLine("Corridor ended!");
+                //System.Console.WriteLine("Corridor ended!");
             }
             return false;
         }
