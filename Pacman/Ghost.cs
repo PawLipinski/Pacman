@@ -122,10 +122,7 @@ namespace Pacman
                 else return true;
             }
 
-            else
-            {
-                return true;
-            }
+            return true;
         }
 
         //public bool GoToDestination(List<Key> availableDirs)
